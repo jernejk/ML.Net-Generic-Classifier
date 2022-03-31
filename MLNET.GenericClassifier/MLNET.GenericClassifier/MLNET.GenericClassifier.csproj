@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MLNET.GenericClassifier.Core\MLNET.GenericClassifier.Core.csproj" />
+    <ProjectReference Include="..\MLNET.GenericClassifier.Trainer.Core\MLNET.GenericClassifier.Trainer.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Data\CommitMessages.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\transactions.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>
