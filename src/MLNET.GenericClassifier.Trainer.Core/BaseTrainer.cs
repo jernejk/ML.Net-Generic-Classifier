@@ -8,7 +8,7 @@ public interface IBaseTrainer
 {
     public MLContext MlContext { get; }
 
-    RunDetail<MulticlassClassificationMetrics> AutoTrain(IDataView? trainingData, uint maxTimeInSec);
+    RunDetail<MulticlassClassificationMetrics> AutoTrain(IDataView? trainingData, uint maxTimeInSec, IDataView? validationdata = null);
     void SaveModel(string modelSavePath, ITransformer model);
     void SaveModel(Stream stream, ITransformer model);
 }
@@ -24,7 +24,7 @@ public abstract class BaseTrainer : IBaseTrainer
 
     public MLContext MlContext { get; }
 
-    public RunDetail<MulticlassClassificationMetrics> AutoTrain(IDataView? trainingData, uint maxTimeInSec)
+    public RunDetail<MulticlassClassificationMetrics> AutoTrain(IDataView trainingData, uint maxTimeInSec, IDataView? validationdata = null)
     {
         _trainingDataView = trainingData;
 
@@ -41,11 +41,13 @@ public abstract class BaseTrainer : IBaseTrainer
             .CreateMulticlassClassificationExperiment(experimentSettings);
 
 
-        ExperimentResult<MulticlassClassificationMetrics>? result = experiment.Execute(_trainingDataView, columnInfo);
+        ExperimentResult<MulticlassClassificationMetrics>? result =
+            validationdata != null
+            ? experiment.Execute(_trainingDataView,  validationdata, columnInfo)
+            : experiment.Execute(_trainingDataView, columnInfo);
 
         return result.BestRun;
     }
-
 
     public void SaveModel(string modelSavePath, ITransformer model)
     {
